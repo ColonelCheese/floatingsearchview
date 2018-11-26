@@ -88,13 +88,13 @@ public class FloatingSearchView extends FrameLayout {
 
     private final static String TAG = FloatingSearchView.class.getSimpleName();
     //The CardView's top or bottom height used for its shadow
-    private final static int CARD_VIEW_TOP_BOTTOM_SHADOW_HEIGHT = 3;
+    protected final static int CARD_VIEW_TOP_BOTTOM_SHADOW_HEIGHT = 3;
     //The CardView's (default) corner radius height
     private final static int CARD_VIEW_CORNERS_HEIGHT = 2;
     private final static int CARD_VIEW_CORNERS_AND_TOP_BOTTOM_SHADOW_HEIGHT =
             CARD_VIEW_TOP_BOTTOM_SHADOW_HEIGHT + CARD_VIEW_CORNERS_HEIGHT;
 
-    private final static long CLEAR_BTN_FADE_ANIM_DURATION = 500;
+    protected final static long CLEAR_BTN_FADE_ANIM_DURATION = 500;
     private final static int CLEAR_BTN_WIDTH_DP = 48;
 
     private final static int LEFT_MENU_WIDTH_AND_MARGIN_START_DP = 52;
@@ -106,7 +106,7 @@ public class FloatingSearchView extends FrameLayout {
     private final static int BACKGROUND_DRAWABLE_ALPHA_SEARCH_NOT_FOCUSED = 0;
     private final static int BACKGROUND_FADE_ANIM_DURATION = 250;
 
-    private final static int MENU_ICON_ANIM_DURATION = 250;
+    protected final static int MENU_ICON_ANIM_DURATION = 250;
 
     private final static Interpolator SUGGEST_ITEM_ADD_ANIM_INTERPOLATOR = new LinearInterpolator();
 
@@ -123,67 +123,68 @@ public class FloatingSearchView extends FrameLayout {
     }
 
     @LeftActionMode
-    private final static int ATTRS_SEARCH_BAR_LEFT_ACTION_MODE_DEFAULT = LEFT_ACTION_MODE_NO_LEFT_ACTION;
-    private final static boolean ATTRS_SHOW_MOVE_UP_SUGGESTION_DEFAULT = false;
-    private final static boolean ATTRS_DISMISS_ON_OUTSIDE_TOUCH_DEFAULT = true;
+    protected final static int ATTRS_SEARCH_BAR_LEFT_ACTION_MODE_DEFAULT = LEFT_ACTION_MODE_NO_LEFT_ACTION;
+    protected final static boolean ATTRS_SHOW_MOVE_UP_SUGGESTION_DEFAULT = false;
+    protected final static boolean ATTRS_DISMISS_ON_OUTSIDE_TOUCH_DEFAULT = true;
     private final static boolean ATTRS_DISMISS_ON_KEYBOARD_DISMISS_DEFAULT = false;
-    private final static boolean ATTRS_SEARCH_BAR_SHOW_SEARCH_KEY_DEFAULT = true;
+    protected final static boolean ATTRS_SEARCH_BAR_SHOW_SEARCH_KEY_DEFAULT = true;
     private final static int ATTRS_QUERY_TEXT_SIZE_SP_DEFAULT = 18;
-    private final static int ATTRS_SUGGESTION_TEXT_SIZE_SP_DEFAULT = 18;
-    private final static boolean ATTRS_SHOW_DIM_BACKGROUND_DEFAULT = true;
-    private final static int ATTRS_SUGGESTION_ANIM_DURATION_DEFAULT = 250;
-    private final static int ATTRS_SEARCH_BAR_MARGIN_DEFAULT = 0;
+    protected final static int ATTRS_SUGGESTION_TEXT_SIZE_SP_DEFAULT = 18;
+    protected final static boolean ATTRS_SHOW_DIM_BACKGROUND_DEFAULT = true;
+    protected final static int ATTRS_SUGGESTION_ANIM_DURATION_DEFAULT = 250;
+    protected final static int ATTRS_SEARCH_BAR_MARGIN_DEFAULT = 0;
     private final static boolean ATTRS_DISMISS_FOCUS_ON_ITEM_SELECTION_DEFAULT = false;
 
-    private Activity mHostActivity;
+    protected Activity mHostActivity;
 
-    private View mMainLayout;
-    private Drawable mBackgroundDrawable;
-    private boolean mDimBackground;
-    private boolean mDismissOnOutsideTouch = true;
-    private boolean mIsFocused;
-    private OnFocusChangeListener mFocusChangeListener;
+    protected View mMainLayout;
+    protected Drawable mBackgroundDrawable;
+    protected boolean mDimBackground;
+    protected boolean mDismissOnOutsideTouch = true;
+    protected boolean mIsFocused;
+    protected OnFocusChangeListener mFocusChangeListener;
     private boolean mDismissFocusOnItemSelection = ATTRS_DISMISS_FOCUS_ON_ITEM_SELECTION_DEFAULT;
 
-    private CardView mQuerySection;
+    protected CardView mQuerySection;
     private OnSearchListener mSearchListener;
-    private SearchInputView mSearchInput;
+    protected SearchInputView mSearchInput;
     private int mQueryTextSize;
     private boolean mCloseSearchOnSofteKeyboardDismiss;
-    private String mTitleText;
-    private boolean mIsTitleSet;
+    protected String mTitleText;
+    protected boolean mIsTitleSet;
     private int mSearchInputTextColor = -1;
     private int mSearchInputHintColor = -1;
     private View mSearchInputParent;
     private String mOldQuery = "";
     private OnQueryChangeListener mQueryListener;
-    private ImageView mLeftAction;
+    protected ImageView mLeftAction;
     private OnLeftMenuClickListener mOnMenuClickListener;
-    private OnHomeActionClickListener mOnHomeActionClickListener;
+    protected OnHomeActionClickListener mOnHomeActionClickListener;
     private ProgressBar mSearchProgress;
-    private DrawerArrowDrawable mMenuBtnDrawable;
+    protected DrawerArrowDrawable mMenuBtnDrawable;
     private Drawable mIconBackArrow;
     private Drawable mIconSearch;
     @LeftActionMode
+    protected
     int mLeftActionMode = LEFT_ACTION_MODE_NOT_SET;
     private int mLeftActionIconColor;
-    private String mSearchHint;
+    protected String mSearchHint;
     private boolean mShowSearchKey;
-    private boolean mMenuOpen = false;
-    private MenuView mMenuView;
-    private int mMenuId = -1;
+    protected boolean mMenuOpen = false;
+    protected MenuView mMenuView;
+    protected int mMenuId = -1;
     private int mActionMenuItemColor;
     private int mOverflowIconColor;
     private OnMenuItemClickListener mActionMenuItemListener;
-    private ImageView mClearButton;
+    protected ImageView mClearButton;
     private int mClearBtnColor;
     private Drawable mIconClear;
-    private int mBackgroundColor;
-    private boolean mSkipQueryFocusChangeEvent;
-    private boolean mSkipTextChangeEvent;
+    protected int mBackgroundColor;
+    protected boolean mSkipQueryFocusChangeEvent;
+    protected boolean mSkipTextChangeEvent;
     private View.OnClickListener mLeftMenuClickListener;
 
-    private View mDivider;
+    protected View mDivider;
     private int mDividerColor;
 
     private RelativeLayout mSuggestionsSection;
@@ -198,7 +199,7 @@ public class FloatingSearchView extends FrameLayout {
     private boolean mIsSuggestionsSectionHeightSet;
     private boolean mShowMoveUpSuggestion = ATTRS_SHOW_MOVE_UP_SUGGESTION_DEFAULT;
     private OnSuggestionsListHeightChanged mOnSuggestionsListHeightChanged;
-    private long mSuggestionSectionAnimDuration;
+    protected long mSuggestionSectionAnimDuration;
     private OnClearSearchActionListener mOnClearSearchActionListener;
 
     //An interface for implementing a listener that will get notified when the suggestions
@@ -360,12 +361,12 @@ public class FloatingSearchView extends FrameLayout {
         init(attrs);
     }
 
-    private void init(AttributeSet attrs) {
+    protected void init(AttributeSet attrs) {
 
         mHostActivity = Util.getHostActivity(getContext());
 
         LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mMainLayout = inflate(getContext(), R.layout.floating_search_layout, this);
+        mMainLayout = inflate(getContext(), getLayoutId(), this);
         mBackgroundDrawable = new ColorDrawable(Color.BLACK);
 
         mQuerySection = (CardView) findViewById(R.id.search_query_section);
@@ -387,7 +388,11 @@ public class FloatingSearchView extends FrameLayout {
         setupViews(attrs);
     }
 
-    private void initDrawables() {
+    protected int getLayoutId() {
+        return R.layout.floating_search_layout;
+    }
+
+    protected void initDrawables() {
         mMenuBtnDrawable = new DrawerArrowDrawable(getContext());
         mIconClear = Util.getWrappedDrawable(getContext(), R.drawable.ic_clear_black_24dp);
         mIconBackArrow = Util.getWrappedDrawable(getContext(), R.drawable.ic_arrow_back_black_24dp);
@@ -400,32 +405,34 @@ public class FloatingSearchView extends FrameLayout {
 
         if (mIsInitialLayout) {
 
-            //we need to add 5dp to the mSuggestionsSection because we are
-            //going to move it up by 5dp in order to cover the search bar's
-            //shadow padding and rounded corners. We also need to add an additional 10dp to
-            //mSuggestionsSection in order to hide mSuggestionListContainer's
-            //rounded corners and shadow for both, top and bottom.
-            int addedHeight = 3 * Util.dpToPx(CARD_VIEW_CORNERS_AND_TOP_BOTTOM_SHADOW_HEIGHT);
-            final int finalHeight = mSuggestionsSection.getHeight() + addedHeight;
-            mSuggestionsSection.getLayoutParams().height = finalHeight;
-            mSuggestionsSection.requestLayout();
-            ViewTreeObserver vto = mSuggestionListContainer.getViewTreeObserver();
-            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
+            if (mSuggestionsSection != null) {
+                //we need to add 5dp to the mSuggestionsSection because we are
+                //going to move it up by 5dp in order to cover the search bar's
+                //shadow padding and rounded corners. We also need to add an additional 10dp to
+                //mSuggestionsSection in order to hide mSuggestionListContainer's
+                //rounded corners and shadow for both, top and bottom.
+                int addedHeight = 3 * Util.dpToPx(CARD_VIEW_CORNERS_AND_TOP_BOTTOM_SHADOW_HEIGHT);
+                final int finalHeight = mSuggestionsSection.getHeight() + addedHeight;
+                mSuggestionsSection.getLayoutParams().height = finalHeight;
+                mSuggestionsSection.requestLayout();
+                ViewTreeObserver vto = mSuggestionListContainer.getViewTreeObserver();
+                vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
 
-                    if (mSuggestionsSection.getHeight() == finalHeight) {
-                        Util.removeGlobalLayoutObserver(mSuggestionListContainer, this);
+                        if (mSuggestionsSection.getHeight() == finalHeight) {
+                            Util.removeGlobalLayoutObserver(mSuggestionListContainer, this);
 
-                        mIsSuggestionsSectionHeightSet = true;
-                        moveSuggestListToInitialPos();
-                        if (mSuggestionSecHeightListener != null) {
-                            mSuggestionSecHeightListener.onSuggestionSecHeightSet();
-                            mSuggestionSecHeightListener = null;
+                            mIsSuggestionsSectionHeightSet = true;
+                            moveSuggestListToInitialPos();
+                            if (mSuggestionSecHeightListener != null) {
+                                mSuggestionSecHeightListener.onSuggestionSecHeightSet();
+                                mSuggestionSecHeightListener = null;
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
 
             mIsInitialLayout = false;
 
@@ -437,7 +444,7 @@ public class FloatingSearchView extends FrameLayout {
         }
     }
 
-    private void setupViews(AttributeSet attrs) {
+    protected void setupViews(AttributeSet attrs) {
 
         mSuggestionsSection.setEnabled(false);
 
@@ -458,7 +465,7 @@ public class FloatingSearchView extends FrameLayout {
         }
     }
 
-    private void applyXmlAttributes(AttributeSet attrs) {
+    protected void applyXmlAttributes(AttributeSet attrs) {
 
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.FloatingSearchView);
 
@@ -548,7 +555,7 @@ public class FloatingSearchView extends FrameLayout {
         }
     }
 
-    private void setupQueryBar() {
+    protected void setupQueryBar() {
 
         mSearchInput.setTextColor(mSearchInputTextColor);
         mSearchInput.setHintTextColor(mSearchInputHintColor);
@@ -921,7 +928,7 @@ public class FloatingSearchView extends FrameLayout {
      *
      * @param sizePx
      */
-    private void setSuggestionItemTextSize(int sizePx) {
+    protected void setSuggestionItemTextSize(int sizePx) {
         //todo implement dynamic suggestionTextSize setter and expose method
         this.mSuggestionsTextSizePx = sizePx;
     }
@@ -961,7 +968,7 @@ public class FloatingSearchView extends FrameLayout {
         mSearchInputParent.setTranslationX(queryTranslationX);
     }
 
-    private void toggleLeftMenu() {
+    protected void toggleLeftMenu() {
         if (mMenuOpen) {
             closeMenu(true);
         } else {
@@ -1254,7 +1261,7 @@ public class FloatingSearchView extends FrameLayout {
         return updatedToNotFocused;
     }
 
-    private void setupSuggestionSection() {
+    protected void setupSuggestionSection() {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, true);
@@ -1327,7 +1334,7 @@ public class FloatingSearchView extends FrameLayout {
         mSearchInput.setSelection(mSearchInput.getText().length());
     }
 
-    private void moveSuggestListToInitialPos() {
+    protected void moveSuggestListToInitialPos() {
         //move the suggestions list to the collapsed position
         //which is translationY of -listContainerHeight
         mSuggestionListContainer.setTranslationY(-mSuggestionListContainer.getHeight());
@@ -1343,8 +1350,8 @@ public class FloatingSearchView extends FrameLayout {
         swapSuggestions(newSearchSuggestions, true);
     }
 
-    private void swapSuggestions(final List<? extends SearchSuggestion> newSearchSuggestions,
-                                 final boolean withAnim) {
+    protected void swapSuggestions(final List<? extends SearchSuggestion> newSearchSuggestions,
+                                   final boolean withAnim) {
 
         mSuggestionsList.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -1371,8 +1378,8 @@ public class FloatingSearchView extends FrameLayout {
     }
 
     //returns true if the suggestion items occupy the full RecyclerView's height, false otherwise
-    private boolean updateSuggestionsSectionHeight(List<? extends SearchSuggestion>
-                                                           newSearchSuggestions, boolean withAnim) {
+    protected boolean updateSuggestionsSectionHeight(List<? extends SearchSuggestion>
+                                                             newSearchSuggestions, boolean withAnim) {
 
         final int cardTopBottomShadowPadding = Util.dpToPx(CARD_VIEW_CORNERS_AND_TOP_BOTTOM_SHADOW_HEIGHT);
         final int cardRadiusSize = Util.dpToPx(CARD_VIEW_TOP_BOTTOM_SHADOW_HEIGHT);
@@ -1469,7 +1476,7 @@ public class FloatingSearchView extends FrameLayout {
         return mIsFocused;
     }
 
-    private void setSearchFocusedInternal(final boolean focused) {
+    protected void setSearchFocusedInternal(final boolean focused) {
         this.mIsFocused = focused;
 
         if (focused) {
@@ -1536,7 +1543,7 @@ public class FloatingSearchView extends FrameLayout {
         }
     }
 
-    private void transitionInLeftSection(boolean withAnim) {
+    protected void transitionInLeftSection(boolean withAnim) {
 
         if (mSearchProgress.getVisibility() != View.VISIBLE) {
             mLeftAction.setVisibility(View.VISIBLE);
@@ -1598,7 +1605,7 @@ public class FloatingSearchView extends FrameLayout {
         }
     }
 
-    private void transitionOutLeftSection(boolean withAnim) {
+    protected void transitionOutLeftSection(boolean withAnim) {
 
         switch (mLeftActionMode) {
             case LEFT_ACTION_MODE_SHOW_HAMBURGER:
@@ -1773,7 +1780,7 @@ public class FloatingSearchView extends FrameLayout {
         }
     }
 
-    private void fadeOutBackground() {
+    protected void fadeOutBackground() {
         ValueAnimator anim = ValueAnimator.ofInt(BACKGROUND_DRAWABLE_ALPHA_SEARCH_FOCUSED, BACKGROUND_DRAWABLE_ALPHA_SEARCH_NOT_FOCUSED);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -1787,7 +1794,7 @@ public class FloatingSearchView extends FrameLayout {
         anim.start();
     }
 
-    private void fadeInBackground() {
+    protected void fadeInBackground() {
         ValueAnimator anim = ValueAnimator.ofInt(BACKGROUND_DRAWABLE_ALPHA_SEARCH_NOT_FOCUSED, BACKGROUND_DRAWABLE_ALPHA_SEARCH_FOCUSED);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
