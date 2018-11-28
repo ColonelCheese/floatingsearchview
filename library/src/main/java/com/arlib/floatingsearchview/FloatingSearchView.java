@@ -21,6 +21,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -405,7 +406,7 @@ public class FloatingSearchView extends FrameLayout {
 
         if (mIsInitialLayout) {
 
-            if (mSuggestionsSection != null) {
+            if (mSuggestionsSection != null && mSuggestionListContainer != null) {
                 //we need to add 5dp to the mSuggestionsSection because we are
                 //going to move it up by 5dp in order to cover the search bar's
                 //shadow padding and rounded corners. We also need to add an additional 10dp to
@@ -446,7 +447,9 @@ public class FloatingSearchView extends FrameLayout {
 
     protected void setupViews(AttributeSet attrs) {
 
-        mSuggestionsSection.setEnabled(false);
+        if (mSuggestionsSection != null) {
+            mSuggestionsSection.setEnabled(false);
+        }
 
         if (attrs != null) {
             applyXmlAttributes(attrs);
@@ -475,8 +478,15 @@ public class FloatingSearchView extends FrameLayout {
                     R.styleable.FloatingSearchView_floatingSearch_searchBarWidth,
                     ViewGroup.LayoutParams.MATCH_PARENT);
             mQuerySection.getLayoutParams().width = searchBarWidth;
-            mDivider.getLayoutParams().width = searchBarWidth;
-            mSuggestionListContainer.getLayoutParams().width = searchBarWidth;
+
+            if (mDivider != null) {
+                mDivider.getLayoutParams().width = searchBarWidth;
+            }
+
+            if (mSuggestionListContainer != null) {
+                mSuggestionListContainer.getLayoutParams().width = searchBarWidth;
+            }
+
             int searchBarLeftMargin = a.getDimensionPixelSize(
                     R.styleable.FloatingSearchView_floatingSearch_searchBarMarginLeft,
                     ATTRS_SEARCH_BAR_MARGIN_DEFAULT);
@@ -487,19 +497,36 @@ public class FloatingSearchView extends FrameLayout {
                     R.styleable.FloatingSearchView_floatingSearch_searchBarMarginRight,
                     ATTRS_SEARCH_BAR_MARGIN_DEFAULT);
             LayoutParams querySectionLP = (LayoutParams) mQuerySection.getLayoutParams();
-            LayoutParams dividerLP = (LayoutParams) mDivider.getLayoutParams();
-            LinearLayout.LayoutParams suggestListSectionLP =
-                    (LinearLayout.LayoutParams) mSuggestionsSection.getLayoutParams();
+
+
+            LayoutParams dividerLP = mDivider != null ? (LayoutParams) mDivider.getLayoutParams() : null;
+
+            LinearLayout.LayoutParams suggestListSectionLP = mSuggestionsSection != null ?
+                    (LinearLayout.LayoutParams) mSuggestionsSection.getLayoutParams() : null;
+
             int cardPadding = Util.dpToPx(CARD_VIEW_TOP_BOTTOM_SHADOW_HEIGHT);
             querySectionLP.setMargins(searchBarLeftMargin, searchBarTopMargin,
                     searchBarRightMargin, 0);
-            dividerLP.setMargins(searchBarLeftMargin + cardPadding, 0,
-                    searchBarRightMargin + cardPadding,
-                    ((MarginLayoutParams) mDivider.getLayoutParams()).bottomMargin);
-            suggestListSectionLP.setMargins(searchBarLeftMargin, 0, searchBarRightMargin, 0);
+
+            if (dividerLP != null) {
+                dividerLP.setMargins(searchBarLeftMargin + cardPadding, 0,
+                        searchBarRightMargin + cardPadding,
+                        ((MarginLayoutParams) mDivider.getLayoutParams()).bottomMargin);
+            }
+
+            if (suggestListSectionLP != null) {
+                suggestListSectionLP.setMargins(searchBarLeftMargin, 0, searchBarRightMargin, 0);
+            }
+
             mQuerySection.setLayoutParams(querySectionLP);
-            mDivider.setLayoutParams(dividerLP);
-            mSuggestionsSection.setLayoutParams(suggestListSectionLP);
+
+            if (mDivider != null) {
+                mDivider.setLayoutParams(dividerLP);
+            }
+
+            if (mSuggestionsSection != null) {
+                mSuggestionsSection.setLayoutParams(suggestListSectionLP);
+            }
 
             setQueryTextSize(a.getDimensionPixelSize(R.styleable.FloatingSearchView_floatingSearch_searchInputTextSize,
                     ATTRS_QUERY_TEXT_SIZE_SP_DEFAULT));
@@ -1127,21 +1154,25 @@ public class FloatingSearchView extends FrameLayout {
      *
      * @param enable true to dismiss on outside touch, false otherwise.
      */
+    @SuppressLint("ClickableViewAccessibility")
     public void setDismissOnOutsideClick(boolean enable) {
 
         mDismissOnOutsideTouch = enable;
-        mSuggestionsSection.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
 
-                //todo check if this is called twice
-                if (mDismissOnOutsideTouch && mIsFocused) {
-                    setSearchFocusedInternal(false);
+        if (mSuggestionsSection != null) {
+            mSuggestionsSection.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    //todo check if this is called twice
+                    if (mDismissOnOutsideTouch && mIsFocused) {
+                        setSearchFocusedInternal(false);
+                    }
+
+                    return true;
                 }
-
-                return true;
-            }
-        });
+            });
+        }
     }
 
     /**
@@ -1263,6 +1294,10 @@ public class FloatingSearchView extends FrameLayout {
 
     protected void setupSuggestionSection() {
 
+        if (mSuggestionsList == null) {
+            return;
+        }
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, true);
         mSuggestionsList.setLayoutManager(layoutManager);
@@ -1325,7 +1360,9 @@ public class FloatingSearchView extends FrameLayout {
         int cardViewBottomPadding = Util.dpToPx(CARD_VIEW_CORNERS_AND_TOP_BOTTOM_SHADOW_HEIGHT);
         //move up the suggestions section enough to cover the search bar
         //card's bottom left and right corners
-        mSuggestionsSection.setTranslationY(-cardViewBottomPadding);
+        if (mSuggestionsSection != null) {
+            mSuggestionsSection.setTranslationY(-cardViewBottomPadding);
+        }
     }
 
     private void setQueryText(CharSequence text) {
@@ -1337,7 +1374,9 @@ public class FloatingSearchView extends FrameLayout {
     protected void moveSuggestListToInitialPos() {
         //move the suggestions list to the collapsed position
         //which is translationY of -listContainerHeight
-        mSuggestionListContainer.setTranslationY(-mSuggestionListContainer.getHeight());
+        if (mSuggestionListContainer != null) {
+            mSuggestionListContainer.setTranslationY(-mSuggestionListContainer.getHeight());
+        }
     }
 
     /**
@@ -1352,6 +1391,10 @@ public class FloatingSearchView extends FrameLayout {
 
     protected void swapSuggestions(final List<? extends SearchSuggestion> newSearchSuggestions,
                                    final boolean withAnim) {
+
+        if (mSuggestionsList == null) {
+            return;
+        }
 
         mSuggestionsList.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -1374,12 +1417,17 @@ public class FloatingSearchView extends FrameLayout {
         mSuggestionsList.setAlpha(0);
         mSuggestionsAdapter.swapData(newSearchSuggestions);
 
-        mDivider.setVisibility(!newSearchSuggestions.isEmpty() ? View.VISIBLE : View.GONE);
+        if (mDivider != null) {
+            mDivider.setVisibility(!newSearchSuggestions.isEmpty() ? View.VISIBLE : View.GONE);
+        }
     }
 
     //returns true if the suggestion items occupy the full RecyclerView's height, false otherwise
     protected boolean updateSuggestionsSectionHeight(List<? extends SearchSuggestion>
                                                              newSearchSuggestions, boolean withAnim) {
+
+        if (mSuggestionListContainer == null)
+            return false;
 
         final int cardTopBottomShadowPadding = Util.dpToPx(CARD_VIEW_CORNERS_AND_TOP_BOTTOM_SHADOW_HEIGHT);
         final int cardRadiusSize = Util.dpToPx(CARD_VIEW_TOP_BOTTOM_SHADOW_HEIGHT);
@@ -1433,6 +1481,10 @@ public class FloatingSearchView extends FrameLayout {
     //results is >= max. The max option allows us to avoid doing unnecessary and potentially long calculations.
     private int calculateSuggestionItemsHeight(List<? extends SearchSuggestion> suggestions, int max) {
 
+        if (mSuggestionsList == null) {
+            return 0;
+        }
+
         //todo
         // 'i < suggestions.size()' in the below 'for' seems unneeded, investigate if there is a use for it.
         int visibleItemsHeight = 0;
@@ -1482,7 +1534,11 @@ public class FloatingSearchView extends FrameLayout {
         if (focused) {
             mSearchInput.requestFocus();
             moveSuggestListToInitialPos();
-            mSuggestionsSection.setVisibility(VISIBLE);
+
+            if (mSuggestionsSection != null) {
+                mSuggestionsSection.setVisibility(VISIBLE);
+            }
+
             if (mDimBackground) {
                 fadeInBackground();
             }
@@ -1530,7 +1586,11 @@ public class FloatingSearchView extends FrameLayout {
 
         //if we don't have focus, we want to allow the client's views below our invisible
         //screen-covering view to handle touches
-        mSuggestionsSection.setEnabled(focused);
+
+        if (mSuggestionsSection != null) {
+            mSuggestionsSection.setEnabled(focused);
+        }
+
     }
 
     private void changeIcon(ImageView imageView, Drawable newIcon, boolean withAnim) {
@@ -1877,14 +1937,18 @@ public class FloatingSearchView extends FrameLayout {
         setCloseSearchOnKeyboardDismiss(savedState.dismissOnSoftKeyboardDismiss);
         setDismissFocusOnItemSelection(savedState.dismissFocusOnSuggestionItemClick);
 
-        mSuggestionsSection.setEnabled(mIsFocused);
+        if (mSuggestionsSection != null) {
+            mSuggestionsSection.setEnabled(mIsFocused);
+        }
         if (mIsFocused) {
 
             mBackgroundDrawable.setAlpha(BACKGROUND_DRAWABLE_ALPHA_SEARCH_FOCUSED);
             mSkipTextChangeEvent = true;
             mSkipQueryFocusChangeEvent = true;
 
-            mSuggestionsSection.setVisibility(VISIBLE);
+            if (mSuggestionsSection != null) {
+                mSuggestionsSection.setVisibility(VISIBLE);
+            }
 
             //restore suggestions list when suggestion section's height is fully set
             mSuggestionSecHeightListener = new OnSuggestionSecHeightSetListener() {
@@ -2029,7 +2093,9 @@ public class FloatingSearchView extends FrameLayout {
 
         //remove any ongoing animations to prevent leaks
         //todo investigate if correct
-        ViewCompat.animate(mSuggestionListContainer).cancel();
+        if (mSuggestionListContainer != null) {
+            ViewCompat.animate(mSuggestionListContainer).cancel();
+        }
     }
 
     private class DrawerListener implements DrawerLayout.DrawerListener {
