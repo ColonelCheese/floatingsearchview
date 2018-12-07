@@ -33,13 +33,10 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v4.view.ViewPropertyAnimatorUpdateListener;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuItemImpl;
@@ -78,7 +75,6 @@ import com.bartoszlipinski.viewpropertyobjectanimator.ViewPropertyObjectAnimator
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -2077,18 +2073,6 @@ public class FloatingSearchView extends FrameLayout {
         };
     }
 
-    private DrawerLayout.DrawerListener mDrawerListener = new DrawerListener();
-
-    public void attachNavigationDrawerToMenuButton(@NonNull DrawerLayout drawerLayout) {
-        drawerLayout.addDrawerListener(mDrawerListener);
-        setOnLeftMenuClickListener(new NavDrawerLeftMenuClickListener(drawerLayout));
-    }
-
-    public void detachNavigationDrawerFromMenuButton(@NonNull DrawerLayout drawerLayout) {
-        drawerLayout.removeDrawerListener(mDrawerListener);
-        setOnLeftMenuClickListener(null);
-    }
-
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
@@ -2097,47 +2081,6 @@ public class FloatingSearchView extends FrameLayout {
         //todo investigate if correct
         if (mSuggestionListContainer != null) {
             ViewCompat.animate(mSuggestionListContainer).cancel();
-        }
-    }
-
-    private class DrawerListener implements DrawerLayout.DrawerListener {
-        @Override
-        public void onDrawerSlide(View drawerView, float slideOffset) {
-            setMenuIconProgress(slideOffset);
-        }
-
-        @Override
-        public void onDrawerOpened(View drawerView) {
-
-        }
-
-        @Override
-        public void onDrawerClosed(View drawerView) {
-
-        }
-
-        @Override
-        public void onDrawerStateChanged(int newState) {
-
-        }
-    }
-
-    private class NavDrawerLeftMenuClickListener implements OnLeftMenuClickListener {
-
-        DrawerLayout mDrawerLayout;
-
-        public NavDrawerLeftMenuClickListener(DrawerLayout drawerLayout) {
-            mDrawerLayout = drawerLayout;
-        }
-
-        @Override
-        public void onMenuOpened() {
-            mDrawerLayout.openDrawer(GravityCompat.START);
-        }
-
-        @Override
-        public void onMenuClosed() {
-            //do nothing
         }
     }
 }
